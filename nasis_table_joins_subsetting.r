@@ -1,5 +1,4 @@
 ### Data manipulation script for NASIS pedon data prep for contiguous United States
-library(stringdist)
 library(rgdal)
 
 ## Subsetting and Joining tables
