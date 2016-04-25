@@ -114,46 +114,14 @@ for(i in ggvec){
 nasispedons$gg = ifelse(nasispedons$gg == "" & grepl("ROCK OUTCROP", nasispedons$seriescap), "ROCK OUTCROP", nasispedons$gg)
 
 #### Now match to nearest soil series to link to other table ####
-
-# Get list of unique soil series
-allseries  =  c(as.character(seriestab$soilseriesname))
-allseries = toupper((allseries))
-
-## Best match code: works, but too many higher taxa mismatches...
-'''seriesmatch = function(ptdf, slist){
-  slist[amatch(ptdf, slist, maxDist = Inf)]
-}
-nasispedons$seriesmatch = seriesmatch(nasispedons$seriescap, allseries) '''
-nasispedons$seriesmatch = ""
-no = 1
-# partial match code for series: also creates large number of errors... 
-for(i in allseries){
-  i = as.character(i)
-  # Start with full matches
-  nasispedons$seriesmatch = ifelse(i==nasispedons$seriescap, nasispedons$seriescap, nasispedons$seriesmatch)
-  # Add partial matches (e.g. "Dekalb like" would be recoded to "Dekalb")
-  nasispedons$seriesmatch = ifelse(nasispedons$seriesmatch == "" & grepl(i, nasispedons$seriescap), i, nasispedons$seriesmatch)
-  no = no + 1
-  print(no)
-}
-
-
 #Need a different series table taxclname for join
 seriestab$taxclnamep = seriestab$taxclname
 
 ## Join nasispedons and series table
 #Conservative match
 nasispedonsjn = cbind(seriestab[match(nasispedons$seriescap, seriestab$soilseriesname),], nasispedons)
-# Riskier match
-nasispedonsjnc = cbind(seriestab[match(nasispedons$seriesmatch, seriestab$soilseriesname),], nasispedons)
 
 ## now fill in the pscs where the series table can add in
-#Riskier matches: pscs
-for(i in pscsvec){
-  i = as.character(i)
-  nasispedonsjnc$pscs = ifelse(nasispedonsjnc$pscs =="" & grepl(i, nasispedonsjnc$taxclnamep), i, nasispedonsjnc$pscs)
-  print(i)
-}
 # With the conservative matches: pscs
 for(i in pscsvec){
   i = as.character(i)
@@ -163,12 +131,6 @@ for(i in pscsvec){
 
 
 ## Now pull out great groups 
-#Riskier match: gg
-for(i in ggvec){
-  i = as.character(i)
-  nasispedonsjnc$gg = ifelse(nasispedonsjnc$gg =="" & grepl(i, nasispedonsjnc$taxclnamep), i, nasispedonsjnc$gg)
-  print(i)
-}
 
 ## With the conservative matches: GG
 for(i in ggvec){
