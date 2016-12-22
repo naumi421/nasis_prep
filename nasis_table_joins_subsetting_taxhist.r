@@ -216,6 +216,10 @@ nasispedonsjn$taxclnameslen = nchar(nasispedonsjn$taxclnames)
 nasispedonsjn$taxclnames = ifelse(nasispedonsjn$taxclnames > 25, nasispedonsjn$taxclnames, "NULL")
 nasispedonsjn$fam = ifelse(nasispedonsjn$fam == "NULL" & nasispedonsjn$taxclnames != "NULL", nasispedonsjn$taxclnames, nasispedonsjn$fam)
 nasispedonsjn$soilseriesnames = ifelse(nasispedonsjn$soilseriesnames == "NULL" & grepl("ROCK OUTCROP", nasispedons$seriescap), "ROCK OUTCROP", nasispedonsjn$soilseriesnames)
+nasispedonsjn$pscsmod = ifelse(nasispedonsjn$pscs == "PSAMMENTS" & grepl("LITHIC", nasispedonsjn$subgrps), "LITHIC PSAMMENTS", nasispedonsjn$pscs)
+nasispedonsjn$pscsmodorg = ifelse(nasispedonsjn$pscs == "PSAMMENTS", "SANDY", nasispedonsjn$pscs)
+nasispedonsjn$pscsmodorg = ifelse(nasispedonsjn$order == "HISTOSOLS", "ORGANIC", nasispedonsjn$pscsmodorg)
+nasispedonsjn$pscsmodorg = ifelse((nasispedonsjn$pscsmodorg != "NULL") & (nasispedonsjn$pscsmodorg != "LOAMY") & (nasispedonsjn$pscsmodorg != "CLAYEY") & grepl("LITHIC", nasispedonsjn$subgrps), paste("LITHIC", nasispedonsjn$pscsmodorg, sep = " "), nasispedonsjn$pscsmodorg)
 
 
 ## Subset table for each taxa level of interest
@@ -227,6 +231,9 @@ nasispedonsjn_subgrp = subset(nasispedonsjn, nasispedonsjn$subgrp != "NULL", sel
 nasispedonsjn_spodic = subset(nasispedonsjn, nasispedonsjn$subgrp != "NULL", select = c(pid, upedonid, xwgs84, ywgs84, spodic))
 nasispedonsjn_series = subset(nasispedonsjn, nasispedonsjn$soilseriesnames != "NULL", select = c(pid, upedonid, xwgs84, ywgs84, soilseriesnames))
 nasispedonsjn_fam = subset(nasispedonsjn, nasispedonsjn$fam != "NULL", select = c(pid, upedonid, xwgs84, ywgs84, fam))
+nasispedonsjn_pscsmod = subset(nasispedonsjn, nasispedonsjn$pscsmod != "NULL", select = c(pid, upedonid, xwgs84, ywgs84, pscsmod))
+nasispedonsjn_pscsmodorg = subset(nasispedonsjn, nasispedonsjn$pscsmodorg != "NULL", select = c(pid, upedonid, xwgs84, ywgs84, pscsmodorg))
+
 
 ## Set workspace to location to save
 setwd("D:/GIS_Archive/NRCS_pedons/NASIS_Pedons_20160301/tables_20160503_join_script")
@@ -238,5 +245,6 @@ write.table(nasispedonsjn_subgrp, file = "nasispts_subgrp_ttab.txt", sep = "\t")
 write.table(nasispedonsjn_spodic, file = "nasispts_spodic_ttab.txt", sep = "\t")
 write.table(nasispedonsjn_series, file = "nasispts_series_ttab.txt", sep = "\t")
 write.table(nasispedonsjn_fam, file = "nasispts_fam_ttab.txt", sep = "\t")
-
+write.table(nasispedonsjn_pscsmod, file = "nasispts_pscsmod_ttab.txt", sep = "\t")
+write.table(nasispedonsjn_pscsmodorg, file = "nasispts_pscsmodorg_ttab.txt", sep = "\t")
 
