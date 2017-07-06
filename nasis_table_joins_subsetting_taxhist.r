@@ -1,4 +1,5 @@
 ### Data manipulation script for NASIS pedon data prep for contiguous United States
+## Taxonomic History table was pre-screened to get most recent correlation and weed out duplicated pedon ids
 library(rgdal)
 
 ## Subsetting and Joining tables
